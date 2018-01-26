@@ -48,7 +48,10 @@ int main() {
         perror("Error : Failed to map framebuffer to memory");
         exit(4);
     }
+    //Posisi awal pesawat
     int x_start = 768;
+
+    // Loop untuk menggerakan pesawat
     while(1) {
         clear_screen();
         drawPlane(x_start, 1);
@@ -63,6 +66,7 @@ int main() {
 }
 
 void draw_one_pixel(int x, int y, color* c) {
+    //Mencetak 1 dot pixel ke layar pada posisi x dan y
     long int pos = (x + vinfo.xoffset) *
                    (vinfo.bits_per_pixel / 8) +
                    (y + vinfo.yoffset) *
@@ -84,6 +88,7 @@ void draw_one_pixel(int x, int y, color* c) {
 }
 
 void drawPlane(int posX, int posY){
+    //Mencetak pesawat pada posisi X dan Y
     FILE * f = fopen("plane.txt", "r");
     char dummy[32];
     int j = posY;
