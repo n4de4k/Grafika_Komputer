@@ -17,9 +17,11 @@ struct fb_fix_screeninfo finfo;
 char *fbp = 0 ; //pointer framebuffer
 int fbfd = 0; //pointer framebuffer driver
 
-void clear_screen();
+void clear_screen(int x_length, int y_length);
 void draw_one_pixel(int x, int y, color* c);
 void drawPlane(int posX, int posY);
+void drawLineKeKanan(int x0, int y0, int x1, int y1);
+void drawLineKeKiri(int x0, int y0, int x1, int y1);
 
 int main() {
     // Open driver framebuffer
@@ -52,12 +54,15 @@ int main() {
     int x_start = 768;
 
     // Loop untuk menggerakan pesawat
-    while(1) {
-        clear_screen();
+    clear_screen(800, 600);
+    while(x_start >= 0) {
+        clear_screen(800, 32);
+        drawLineKeKanan(400,600,652,0);
+        drawLineKeKanan(400,600,420,0);
+        drawLineKeKiri(400,600,170,0);
         drawPlane(x_start, 1);
         x_start--;
-        if (x_start <= 0) x_start = 768;
-        usleep(17);
+        usleep(5000);
     }
 
     munmap(fbp, screenSize);
@@ -118,11 +123,11 @@ void drawPlane(int posX, int posY){
     }
 }
 
-void clear_screen() {
+void clear_screen(int x_length, int y_length) {
     int x, y;
 
-    for (x = 0; x < 800; x++) {
-        for (y = 0; y < 600; y++) {
+    for (x = 0; x < x_length; x++) {
+        for (y = 0; y < y_length; y++) {
             long int position = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) + 
 			                    (y + vinfo.yoffset) * finfo.line_length;
 			                    *(fbp + position) = 255;
@@ -130,5 +135,53 @@ void clear_screen() {
 		                        *(fbp + position + 2) = 255;
 		                        *(fbp + position + 3) = 255;
         }
+    }
+}
+
+void drawLineKeKanan(int x0, int y0, int x1, int y1) {
+    int dx = x1 - x0;
+    int dy = y0 - y1;
+    int D = 2*dy - dx;
+    int x = x0;
+
+    color c;
+    c.r = 0;
+    c.g = 0;
+    c.b = 0;
+    c.a = 0;
+    
+    for (int y = y0; y >= y1; y--) {
+        draw_one_pixel(x, y, &c);
+        draw_one_pixel(x+1, y, &c);
+        
+        if (D > 0) {
+            x++;
+            D = D - 2*dy;
+        }
+        D = D + 2*dx;
+    }
+}
+
+void drawLineKeKiri(int x0, int y0, int x1, int y1) {
+    int dx = x0 - x1;
+    int dy = y0 - y1;
+    int D = 2*dy - dx;
+    int x = x0;
+
+    color c;
+    c.r = 0;
+    c.g = 0;
+    c.b = 0;
+    c.a = 0;
+    
+    for (int y = y0; y >= y1; y--) {
+        draw_one_pixel(x, y, &c);
+        draw_one_pixel(x+1, y, &c);
+        
+        if (D > 0) {
+            x--;
+            D = D - 2*dy;
+        }
+        D = D + 2*dx;
     }
 }
