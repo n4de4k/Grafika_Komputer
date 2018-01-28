@@ -54,15 +54,52 @@ int main() {
     int x_start = 768;
 
     // Loop untuk menggerakan pesawat
+    int xgaris1_awal = 400;
+    int ygaris1_awal = 600;
+    int xgaris1_akhir = 410;
+    int ygaris1_akhir = 576;
+		int ygaris2_awal = 600;
+		int ygaris2_akhir = 574;
+		int xgaris3_awal = 400;
+		int ygaris3_awal = 600;
+		int xgaris3_akhir = 390;
+		int ygaris3_akhir = 576;
     clear_screen(800, 600);
     while(x_start >= 0) {
-        clear_screen(800, 32);
-        drawLineKeKanan(400,600,652,0);
-        drawLineKeKanan(400,600,420,0);
-        drawLineKeKiri(400,600,170,0);
+        //clear_screen(800, 32);
+				clear_screen(800, 600);
+        drawLineKeKanan(xgaris1_awal,ygaris1_awal,xgaris1_akhir,ygaris1_akhir);
+				xgaris1_awal = xgaris1_akhir;
+        ygaris1_awal = ygaris1_akhir;
+        xgaris1_akhir += 10;
+        ygaris1_akhir -= 24;
+       	if(ygaris1_awal <= 0){
+	  			xgaris1_awal = 400;
+   	  		ygaris1_awal = 600;
+    	  	xgaris1_akhir = 410;
+    	  	ygaris1_akhir = 576;
+				}
+        drawLineVertical(400,ygaris2_awal,ygaris2_akhir);
+				ygaris2_awal = ygaris2_akhir;
+				ygaris2_akhir -= 26;
+				if(ygaris2_akhir <= 0){
+					ygaris2_awal = 600;
+					ygaris2_akhir = 574;
+				}
+        drawLineKeKiri(xgaris3_awal,ygaris3_awal,xgaris3_akhir,ygaris3_akhir);
+				xgaris3_awal = xgaris3_akhir;
+        ygaris3_awal = ygaris3_akhir;
+        xgaris3_akhir -= 10;
+        ygaris3_akhir -= 24;
+       	if(ygaris3_awal <= 0){
+	  			xgaris3_awal = 400;
+   	  		ygaris3_awal = 600;
+    	  	xgaris3_akhir = 390;
+    	  	ygaris3_akhir = 576;
+				}
         drawPlane(x_start, 1);
         x_start--;
-        usleep(5000);
+				usleep(10000);
     }
 
     munmap(fbp, screenSize);
@@ -128,7 +165,7 @@ void clear_screen(int x_length, int y_length) {
 
     for (x = 0; x < x_length; x++) {
         for (y = 0; y < y_length; y++) {
-            long int position = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) + 
+            long int position = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) +
 			                    (y + vinfo.yoffset) * finfo.line_length;
 			                    *(fbp + position) = 255;
 		                        *(fbp + position + 1) = 255;
@@ -138,6 +175,17 @@ void clear_screen(int x_length, int y_length) {
     }
 }
 
+void drawLineVertical(int x, int y0, int y1){
+	color c;
+	c.r = 255;
+	c.g = 0;
+	c.b = 0;
+	c.a = 0;
+	for (int y = y0; y >= y1; y--) {
+			draw_one_pixel(x, y, &c);
+			draw_one_pixel(x+1, y, &c);
+		}
+}
 void drawLineKeKanan(int x0, int y0, int x1, int y1) {
     int dx = x1 - x0;
     int dy = y0 - y1;
@@ -145,15 +193,15 @@ void drawLineKeKanan(int x0, int y0, int x1, int y1) {
     int x = x0;
 
     color c;
-    c.r = 0;
+    c.r = 255;
     c.g = 0;
     c.b = 0;
     c.a = 0;
-    
+
     for (int y = y0; y >= y1; y--) {
         draw_one_pixel(x, y, &c);
         draw_one_pixel(x+1, y, &c);
-        
+
         if (D > 0) {
             x++;
             D = D - 2*dy;
@@ -169,15 +217,15 @@ void drawLineKeKiri(int x0, int y0, int x1, int y1) {
     int x = x0;
 
     color c;
-    c.r = 0;
+    c.r = 255;
     c.g = 0;
     c.b = 0;
     c.a = 0;
-    
+
     for (int y = y0; y >= y1; y--) {
         draw_one_pixel(x, y, &c);
         draw_one_pixel(x+1, y, &c);
-        
+
         if (D > 0) {
             x--;
             D = D - 2*dy;
