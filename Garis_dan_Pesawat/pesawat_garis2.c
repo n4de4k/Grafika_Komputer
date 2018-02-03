@@ -69,7 +69,7 @@ int main() {
     while(x_start >= 0) {
         //clear_screen(800, 32);
 				clear_screen(800, 600);
-        drawLineKeKanan(xgaris1_awal,ygaris1_awal,xgaris1_akhir,ygaris1_akhir, 10);
+        drawLineKeKanan(xgaris1_awal,ygaris1_awal,xgaris1_akhir,ygaris1_akhir, 7);
 				xgaris1_awal = xgaris1_akhir;
         ygaris1_awal = ygaris1_akhir;
         xgaris1_akhir += 10;
@@ -80,14 +80,14 @@ int main() {
     	  	xgaris1_akhir = 410;
     	  	ygaris1_akhir = 576;
 				}
-        drawLineVertical(400,ygaris2_awal,ygaris2_akhir, 6);
+        drawLineVertical(400,ygaris2_awal,ygaris2_akhir, 4);
 				ygaris2_awal = ygaris2_akhir;
 				ygaris2_akhir -= 26;
 				if(ygaris2_akhir <= 0){
 					ygaris2_awal = 600;
 					ygaris2_akhir = 574;
 				}
-        drawLineKeKiri(xgaris3_awal,ygaris3_awal,xgaris3_akhir,ygaris3_akhir, 3);
+        drawLineKeKiri(xgaris3_awal,ygaris3_awal,xgaris3_akhir,ygaris3_akhir, 2);
 				xgaris3_awal = xgaris3_akhir;
         ygaris3_awal = ygaris3_akhir;
         xgaris3_akhir -= 10;
@@ -178,8 +178,8 @@ void clear_screen(int x_length, int y_length) {
 
 void drawLineVertical(int x, int y0, int y1, int ketebalan){
 	color c;
-	c.r = 255;
-	c.g = 0;
+	c.r = 0;
+	c.g = 255;
 	c.b = 0;
 	c.a = 0;
 	for (int y = y0; y >= y1; y--) {
@@ -221,9 +221,9 @@ void drawLineKeKiri(int x0, int y0, int x1, int y1, int ketebalan) {
     int x = x0;
 
     color c;
-    c.r = 255;
+    c.r = 0;
     c.g = 0;
-    c.b = 0;
+    c.b = 255;
     c.a = 0;
 
     for (int y = y0; y >= y1; y--) {
