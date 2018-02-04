@@ -12,6 +12,21 @@ typedef struct{
 	int r,g,b,a;
 } color;
 
+typedef struct {
+    int yMax;
+    int yMin;
+    int x;
+    int sign;
+    int dX;
+    int dY;
+    double sum;
+} Bucket;
+
+typedef struct {
+    int x;
+    int y;
+} Vertex;
+
 struct fb_var_screeninfo vinfo;
 struct fb_fix_screeninfo finfo;
 char *fbp = 0 ; //pointer framebuffer
@@ -19,10 +34,10 @@ int fbfd = 0; //pointer framebuffer driver
 
 void clear_screen(int x_length, int y_length);
 void draw_one_pixel(int x, int y, color* c);
-void draw_line_low(int x0, int y0, int x1, int y1);
-void draw_line_high(int x0, int y0, int x1, int y1);
-void draw_line(int x0, int y0, int x1, int y1);
-void floodFill(int x,int y,color* oldcolor,color* newcolor);
+
+Bucket* createEdges(int n, int* x, int* y) {
+    Bucket b[n];
+};
 
 int main() {
     // Open driver framebuffer
@@ -68,27 +83,8 @@ int main() {
                  {16,12,5,12},
                  {5,12,5,9},
                  {5,9,10,5}};
-    int dotA[2] = {10,3};
-
-    // Filling algorithm
-    color old;
-    old.r = -1;
-    old.g = -1;
-    old.b = -1;
-    old.a = 0;
-    color new;
-    new.r = 255;
-    new.g = 0;
-    new.b = 0;
-    new.a = 0;
-    
     clear_screen(400,300);
-    for (int i = 0; i < 15; i++) {
-        draw_line(A[i][0], A[i][1], A[i][2], A[i][3]);
-    }
-
-    floodFill(dotA[0],dotA[1],&old,&new);
-    // draw_one_pixel(10,1,&new);
+    
     return 0;
 }
 
@@ -127,98 +123,4 @@ void draw_one_pixel(int x, int y, color* c) {
         unsigned short int t = r<<11 | g << 5 | b;
         *((unsigned short int*)(fbp + pos)) = t;
 	}
-}
-
-void draw_line_low(int x0, int y0, int x1, int y1) {
-    int dy = y1 - y0;
-    int dx = x1 - x0;
-    int adder_y = 1;
-    if (dy < 0) {
-        adder_y = -1;
-        dy *= -1;
-    }
-    int D = 2*dy - dx;
-    int y = y0;
-    color c;
-    c.r = 255;
-    c.g = 0;
-    c.b = 0;
-    c.a = 0;
-
-    for (int x = x0; x < x1; x++) {
-        draw_one_pixel(x,y, &c);
-        if (D > 0) {
-            y += adder_y;
-            D -= 2 * dx;
-        }
-        D += 2 * dy;
-    }
-}
-
-void draw_line_high(int x0, int y0, int x1, int y1) {
-    int dy = y1 - y0;
-    int dx = x1 - x0;
-    int adder_x = 1;
-    if (dx < 0) {
-        adder_x = -1;
-        dx *= -1;
-    }
-    int D = 2*dx - dy;
-    int x = x0;
-    color c;
-    c.r = 255;
-    c.g = 0;
-    c.b = 0;
-    c.a = 0;
-
-    for (int y = y0; y < y1; y++) {
-        draw_one_pixel(x,y, &c);
-        if (D > 0) {
-            x += adder_x;
-            D -= 2 * dy;
-        }
-        D += 2 * dx;
-    }
-}
-
-void draw_line(int x0, int y0, int x1, int y1) {
-    if (abs(y1 - y0) < abs(x1 - x0)) {
-        if (x0 >= x1) {
-            draw_line_low(x1,y1,x0,y0);
-        } else {
-            draw_line_low(x0,y0,x1,y1);
-        }
-    } else {
-        if (y0 >= y1) {
-            draw_line_high(x1,y1,x0,y0);
-        } else {
-            draw_line_high(x0,y0,x1,y1);
-        }
-    }
-}
-
-void floodFill(int x,int y,color* oldcolor,color* newcolor) {
-    long int location = (x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) +
-                        (y+vinfo.yoffset)*finfo.line_length;
-    
-    color c;
-    c.r = *(fbp + location);
-    c.g = *(fbp + location + 1);
-    c.b = *(fbp + location + 3);
-    c.a = 0;
-
-    // printf("%d %d %d\n", c.r, c.g, c.b);
-    if (c.r == oldcolor->r &&
-        c.g == oldcolor->g &&
-        c.b == oldcolor->b) {
-            *(fbp + location) = newcolor->b;
-	        *(fbp + location + 1) = newcolor->g;
-	        *(fbp + location + 2) = newcolor->r;
-	        *(fbp + location + 3) = newcolor->a;
-
-            floodFill(x+1, y, oldcolor, newcolor);
-            floodFill(x, y+1, oldcolor, newcolor);
-            floodFill(x-1, y, oldcolor, newcolor);
-            floodFill(x, y-1, oldcolor, newcolor);
-        }
 }
