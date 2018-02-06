@@ -81,7 +81,7 @@ int D[10][4] = {{0,0,17,0},
                  {5,4,15,4},
                  {15,4,15,17},
                  {15,17,5,17},
-                 {5,17,5,4}	
+                 {5,17,5,4}
                  };
 int dotD[2] = {2,3};
 int D_num = 10;
@@ -97,9 +97,9 @@ int E[12][4] = {{0,0,20,0},
                  {4,17,20,17},
                  {20,17,20,20},
                  {20,20,0,20},
-                 {0,20,0,0}	
+                 {0,20,0,0}
                  };
-int dotE[2] = {2,3}; 
+int dotE[2] = {2,3};
 int E_num = 12;
 
 int F[10][4] = {{0,0,20,0},
@@ -111,7 +111,7 @@ int F[10][4] = {{0,0,20,0},
                  {13,12,4,12},
                  {4,12,4,20},
                  {4,20,0,20},
-                 {0,20,0,0}	
+                 {0,20,0,0}
                  };
 int dotF[2] = {2,3};
 int F_num = 10;
@@ -327,6 +327,38 @@ int dotT[2] = {10,10};
 int T_num = 9;
 
 
+
+int Z[10][4] = {{0,0,19,0},
+							{0,0,0,3},
+							{0,3,14,3},
+							{19,0,19,3},
+							{14,3,0,17},
+							{19,3,5,17},
+							{0,17,0,19},
+							{0,19,19,19},
+							{19,19,19,17},
+							{19,17,5,17}};
+int dotZ[2] = {3,1};
+int Z_num = 10;
+
+
+int Y[11][4] = {{0,0,3,0},
+							{0,0,0,3},
+							{0,3,7,10},
+							{7,10,7,19},
+							{7,19,12,19},
+							{12,19,12,10},
+							{12,10,19,3},
+							{19,3,19,0},
+							{19,0,16,0},
+							{16,0,9,6},
+							{9,6,3,0}
+						};
+int dotY[2] = {10,17};
+int Y_num = 11;
+
+
+
 void clear_screen(int x_length, int y_length);
 void draw_one_pixel(int x, int y, color* c);
 void draw_line_low(int x0, int y0, int x1, int y1);
@@ -494,7 +526,7 @@ void draw_line(int x0, int y0, int x1, int y1) {
 void floodFill(int x,int y,color* oldcolor,color* newcolor) {
     long int location = (x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) +
                         (y+vinfo.yoffset)*finfo.line_length;
-    
+
     color c;
     c.r = *(fbp + location);
     c.g = *(fbp + location + 1);
@@ -709,6 +741,25 @@ void drawChar(char c, int pos) {
             floodFill(dotT[0]+pos,dotT[1],&old,&new);
         };
         break;
+
+				case 'Y' : {
+					for (int i = 0; i < Y_num; i++) {
+							draw_line(Y[i][0]+pos, Y[i][1], Y[i][2]+pos, Y[i][3]);
+					}
+
+					floodFill(dotY[0]+pos,dotY[1],&old,&new);
+				}
+				break;
+
+
+				case 'Z' : {
+					for (int i = 0; i < Z_num; i++) {
+							draw_line(Z[i][0]+pos, Z[i][1], Z[i][2]+pos, Z[i][3]);
+					}
+
+					floodFill(dotZ[0]+pos,dotZ[1],&old,&new);
+				}
+				break;
 
         default : {
             printf("Sorry. Font is not added yet. \n");
