@@ -10,7 +10,18 @@ int main() {
         Polygon baling((char*) "./objek/persegipanjang.txt");
         Polygon baling2((char*) "./objek/persegipanjang.txt");
         Basicfunction::clearscreen();
-
+        Titik p(301,131);
+        Titik q(499,131);
+        Titik r(499,279);
+        Titik s(301,279);
+        Garis a(p,q);
+        Garis b(q,r);
+        Garis c(r,s);
+        Garis d(s,p);
+        a.print(0,0,255,0,0);
+        b.print(0,0,255,0,0);
+        c.print(0,0,255,0,0);
+        d.print(0,0,255,0,0);
         pesawat.geser(250,150);
         baling.geser(250,150);
         baling2.geser(250,150);
@@ -31,6 +42,11 @@ int main() {
         sudut += 10;
         usleep(10000);
     }
-
+    // Titik p(100,100);
+    // Titik q(150,300);
+    // ClipWindow cw(50,200,400,50);
+    // PointCode p1(p,cw);
+    // PointCode p2(q,cw);
+    // printf("%d\n", PointCode::logicLine(p1,p2));
     return 0;
 }

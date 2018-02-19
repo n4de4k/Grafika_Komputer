@@ -2,6 +2,7 @@
 #define GARIS
 
 #include "./titik.cpp"
+#include "./pointcode.cpp"
 #include <utility>
 #include <stdlib.h>
 #include <unistd.h>
@@ -61,7 +62,13 @@ class Garis {
     }
 
     void print(int divx, int divy, int r, int g, int b){
-        int fbfd = 0;
+        
+        ClipWindow cw(300,500, 280, 130);
+        PointCode p1(awal, cw);
+        PointCode p2(akhir, cw);
+
+        if (PointCode::logicLine(p1,p2) == 0) {
+            int fbfd = 0;
         struct fb_var_screeninfo vinfo;
         struct fb_fix_screeninfo finfo;
         long int screensize = 0;
@@ -69,7 +76,6 @@ class Garis {
         int x = 0, y = 0, timer = 0;
         long int location = 0;
         int maxY;
-
         // Open the file for reading and writing
         fbfd = open("/dev/fb0", O_RDWR);
         if (fbfd == -1) {
@@ -133,6 +139,9 @@ class Garis {
 
         munmap(fbp, screensize);
         close(fbfd);
+        } else {
+            
+        }
     }
 
     void rotate(float degree, Titik topLeft, Titik bottomRight) {

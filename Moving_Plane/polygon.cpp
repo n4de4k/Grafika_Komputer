@@ -127,9 +127,16 @@ class Polygon {
                         for(int i = 0; i < count; i++) {
                             listOfIntersectTitiks[i].setX(listOfIntersectTitiks[i].getX()+1);
                             listOfIntersectTitiks[i+1].setX(listOfIntersectTitiks[i+1].getX()-1);
-
-                            Garis line(listOfIntersectTitiks[i], listOfIntersectTitiks[i+1]);
-                            line.print(0,0, red, green, blue);
+                            if (listOfIntersectTitiks[i].getX() <= 300) {
+                                listOfIntersectTitiks[i].setX(301);
+                            }
+                            if (listOfIntersectTitiks[i+1].getX() >= 500) {
+                                listOfIntersectTitiks[i+1].setX(499);
+                            }
+                            if (listOfIntersectTitiks[i].getX() < listOfIntersectTitiks[i+1].getX()) {
+                                Garis line(listOfIntersectTitiks[i], listOfIntersectTitiks[i+1]);
+                                line.print(0,0, red, green, blue);
+                            }
 
                             i++;
                         }
@@ -232,6 +239,10 @@ class Polygon {
             for(int i = 0; i < lines.size(); i++){
                 lines[i].geser(x, y);
             }
+        }
+
+        void Dealokasi() {
+            
         }
 
     private:
