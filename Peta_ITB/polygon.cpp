@@ -10,6 +10,7 @@
 #include <math.h>
 #include <algorithm>
 #include "./basicfunction.cpp"
+#include "./pointcode.cpp"
 
 using namespace std;
 
@@ -67,7 +68,7 @@ class Polygon {
             }
         }
 
-        void scanLine(int red, int green, int blue) {
+        void scanLine(int red, int green, int blue, ClipWindow cw) {
             int scanLineY = topLeft.getY(); // Represent Y = c
             
             for(int scan = topLeft.getY(); scan <= bottomRight.getY(); scan++){
@@ -128,9 +129,22 @@ class Polygon {
                             listOfIntersectTitiks[i].setX(listOfIntersectTitiks[i].getX()+1);
                             listOfIntersectTitiks[i+1].setX(listOfIntersectTitiks[i+1].getX()-1);
 
-                            Garis line(listOfIntersectTitiks[i], listOfIntersectTitiks[i+1]);
-                            line.print(0,0, red, green, blue);
+                            if (listOfIntersectTitiks[i].getX() <= cw.getL()) {
+                                listOfIntersectTitiks[i].setX(cw.getL() + 1);
+                            }
+                            if (listOfIntersectTitiks[i+1].getX() >= cw.getR()) {
+                                listOfIntersectTitiks[i+1].setX(cw.getR() - 1);
+                            }
+                            if (listOfIntersectTitiks[i].getX() < listOfIntersectTitiks[i+1].getX()) {
+                                Garis line(listOfIntersectTitiks[i], listOfIntersectTitiks[i+1]);
+                                PointCode p1(line.getAwal(), cw);
+                                PointCode p2(line.getAkhir(), cw);
 
+                                if (PointCode::logicLine(p1,p2) == 0) {
+                                    line.print(0,0, red, green, blue);
+                                }
+                            }
+                            // Garis line(listOfIntersectTitiks[i], listOfIntersectTitiks[i+1]);
                             i++;
                         }
                     }

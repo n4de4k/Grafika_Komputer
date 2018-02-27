@@ -8,6 +8,9 @@
 #include <utility>
 #include <math.h>
 #include <algorithm>
+#include "./clipwindow.cpp"
+#include "./pointcode.cpp"
+#include "./titik.cpp"
 
 using namespace std;
 class Lingkaran {
@@ -18,7 +21,7 @@ class Lingkaran {
         radius = r;
     }
 
-    void drawPixel(int x, int y, int r, int g, int b) {
+    void drawPixel(int x, int y, int r, int g, int b, ClipWindow cw) {
         int fbfd = 0;
         struct fb_var_screeninfo vinfo;
         struct fb_fix_screeninfo finfo;
@@ -55,14 +58,18 @@ class Lingkaran {
             exit(4);
         }
         // =============================================
-        
-        location = (x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) +
-                            (y+vinfo.yoffset) * finfo.line_length;
-        if(y > 0 && y < vinfo.yres  && x > 0 && x < vinfo.xres){ 
-            *(fbp + location) = b;        
-            *(fbp + location + 1) = g;     
-            *(fbp + location + 2) = r;    
-            *(fbp + location + 3) = 0;      
+        Titik p = Titik(x,y);
+        PointCode pc = PointCode(p, cw);
+
+        if (pc.getR() == false && pc.getL() == false && pc.getT() == false && pc.getB() == false) {
+            location = (x+vinfo.xoffset) * (vinfo.bits_per_pixel/8) +
+                                (y+vinfo.yoffset) * finfo.line_length;
+            if(y > 0 && y < vinfo.yres  && x > 0 && x < vinfo.xres){ 
+                *(fbp + location) = b;        
+                *(fbp + location + 1) = g;     
+                *(fbp + location + 2) = r;    
+                *(fbp + location + 3) = 0;      
+            }
         }
 
 
@@ -71,7 +78,7 @@ class Lingkaran {
         close(fbfd);
     }
 
-    void drawCircle() {
+    void drawCircle(ClipWindow cw) {
         int r = 255, g = 0, b = 0;
         int x = radius - 1;
         int y = 0;
@@ -80,14 +87,14 @@ class Lingkaran {
         int err = dx - (radius << 1);
 
         while (x >= y) {
-            drawPixel(x0 + x, y0 + y, r, g, b);
-            drawPixel(x0 + y, y0 + x, r, g, b);
-            drawPixel(x0 - y, y0 + x, r, g, b);
-            drawPixel(x0 - x, y0 + y, r, g, b);
-            drawPixel(x0 - x, y0 - y, r, g, b);
-            drawPixel(x0 - y, y0 - x, r, g, b);
-            drawPixel(x0 + y, y0 - x, r, g, b);
-            drawPixel(x0 + x, y0 - y, r, g, b);
+            drawPixel(x0 + x, y0 + y, r, g, b, cw);
+            drawPixel(x0 + y, y0 + x, r, g, b, cw);
+            drawPixel(x0 - y, y0 + x, r, g, b, cw);
+            drawPixel(x0 - x, y0 + y, r, g, b, cw);
+            drawPixel(x0 - x, y0 - y, r, g, b, cw);
+            drawPixel(x0 - y, y0 - x, r, g, b, cw);
+            drawPixel(x0 + y, y0 - x, r, g, b, cw);
+            drawPixel(x0 + x, y0 - y, r, g, b, cw);
 
             if (err <= 0) {
                 y++;
