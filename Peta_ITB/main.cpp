@@ -19,9 +19,25 @@ void PrintITB(ClipWindow cw) {
     Polygon labtek6 = Polygon((char *) "./objek/labtek6.txt");
     Polygon labtek7 = Polygon((char *) "./objek/labtek7.txt");
     Polygon labtek8 = Polygon((char *) "./objek/labtek8.txt");
+    Polygon jalancc = Polygon((char *) "./objek/jalanantarcc.txt");
+    Polygon jalandpr = Polygon((char *) "./objek/jalanantardpr.txt");
+    Polygon ccbar = Polygon((char *) "./objek/ccbarat.txt");
+    Polygon cctim = Polygon((char *) "./objek/cctimur.txt");
+    Polygon gkubar = Polygon((char *) "./objek/gkubar.txt");
+    Polygon gkutim = Polygon((char *) "./objek/gkutim.txt");
+    Polygon tvst = Polygon((char *) "./objek/tvst.txt");
+    Polygon pln = Polygon((char *) "./objek/pln.txt");
+    Polygon jln1 = Polygon((char *) "./objek/jalanlabtek1.txt");
+    Polygon jln2 = Polygon((char *) "./objek/jalanlabtek2.txt");
+
     cw.print();
     for (int i = 20; i > 10; i--) {
         Lingkaran l1 = Lingkaran(400,300,i);
+        l1.drawCircle(cw);
+    }
+
+    for (int i = 40; i > 30; i--) {
+        Lingkaran l1 = Lingkaran(400, 559, i);
         l1.drawCircle(cw);
     }
     
@@ -29,7 +45,16 @@ void PrintITB(ClipWindow cw) {
     labtek6.scanLine(0,255,0, cw);
     labtek7.scanLine(0,255,0, cw);
     labtek8.scanLine(0,255,0, cw);
-
+    jalancc.scanLine(0,0,255, cw);
+    jalandpr.scanLine(0,0,255, cw);
+    ccbar.scanLine(255,180,10, cw);
+    cctim.scanLine(255,180,10, cw);
+    gkubar.scanLine(180,220,79, cw);
+    gkutim.scanLine(180,220,79, cw);
+    tvst.scanLine(0,200,170,cw);
+    pln.scanLine(0,200,170, cw);
+    jln1.scanLine(0,0,255, cw);
+    jln2.scanLine(0,0,255, cw);
     char c = getch();
 
     if (c != 'x') {
@@ -52,7 +77,7 @@ void PrintITB(ClipWindow cw) {
 }
 
 int main() {
-    ClipWindow cw(260,400, 300, 150);
+    ClipWindow cw(80,590, 390, 30);
     PrintITB(cw);
 
     return 0;
