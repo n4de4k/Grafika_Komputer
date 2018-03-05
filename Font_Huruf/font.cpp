@@ -21,7 +21,7 @@ void clear_screen();
 void draw_one_pixel(int x, int y, color* c);
 
 /* MAIN PROGRAM */
-int main() {
+void Font() {
     // Open driver framebuffer
     fbfd = open("/dev/fb0", O_RDWR);
     if (fbfd == -1) {
@@ -44,7 +44,7 @@ int main() {
     // Mapping framebuffer to memory
     int screenSize = vinfo.xres * vinfo.yres *vinfo.bits_per_pixel / 8;
     fbp = (char *) mmap(0, screenSize, PROT_READ | PROT_WRITE, MAP_SHARED, fbfd, 0);
-    if ((int) fbp == -1) {
+    if (*fbp == -1) {
         perror("Error : Failed to map framebuffer to memory");
         exit(4);
     }
@@ -121,7 +121,6 @@ int main() {
     close(fbfd);
 
     getchar();
-    return 0;
 }
 
 /* FUNCTION AND PROCEDURE */
