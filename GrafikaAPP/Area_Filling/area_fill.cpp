@@ -468,6 +468,7 @@ void AreaFill() {
     // Getting user input
     char input[50], ch;
     int w = 0;
+    printf("Masukkan teks anda:\n");
     while (ch != '\n') {
             ch = getchar();
             input[w] = ch;

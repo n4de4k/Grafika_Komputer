@@ -55,6 +55,7 @@ void Font() {
     unsigned char m[20][20];
     char input[30], ch;
     int w = 0;
+    printf("Masukkan teks anda :\n");
     while (ch != '\n') {
             ch = getchar();
             input[w] = ch;
